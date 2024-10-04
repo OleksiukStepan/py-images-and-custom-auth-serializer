@@ -31,6 +31,8 @@ class CinemaHallSerializer(serializers.ModelSerializer):
 
 
 class MovieSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(read_only=True)
+
     class Meta:
         model = Movie
         fields = (
@@ -40,6 +42,7 @@ class MovieSerializer(serializers.ModelSerializer):
             "duration",
             "genres",
             "actors",
+            "image"
         )
 
 
@@ -57,16 +60,10 @@ class MovieListSerializer(MovieSerializer):
         many=True, read_only=True, slug_field="full_name"
     )
 
-    class Meta(MovieSerializer.Meta):
-        fields = MovieSerializer.Meta.fields + ("image",)
-
 
 class MovieDetailSerializer(MovieSerializer):
     genres = GenreSerializer(many=True, read_only=True)
     actors = ActorSerializer(many=True, read_only=True)
-
-    class Meta(MovieSerializer.Meta):
-        fields = MovieSerializer.Meta.fields + ("image",)
 
 
 class MovieSessionSerializer(serializers.ModelSerializer):
